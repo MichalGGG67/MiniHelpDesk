@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:MiniHelpDesk.Models"
+             x:Class="MiniHelpDesk.Views.MainPage"
+             Title="Mini HelpDesk"
+             BackgroundColor="#F2F2F2">
+
+    <!-- Ten sam widok jest ustawiany poziomo na Windows i pionowo na Androidzie. -->
+    <Grid x:Name="RootGrid" Padding="12" RowSpacing="10" ColumnSpacing="10"
+          RowDefinitions="Auto,Auto,*" ColumnDefinitions="*">
+
+        <Label Grid.Row="0" Grid.ColumnSpan="2"
+               Text="Mini HelpDesk" FontSize="24" FontAttributes="Bold" />
+
+        <!-- Panel dodawania i edycji zgłoszenia -->
+        <Border x:Name="FormPanel" Grid.Row="1" Grid.Column="0"
+                BackgroundColor="White" Stroke="#CCCCCC" Padding="12">
+            <VerticalStackLayout Spacing="6">
+                <Label Text="{Binding FormTitle}" FontSize="18" FontAttributes="Bold" />
+
+                <Label Text="Nazwa" />
+                <Entry Placeholder="Nazwa zgłoszenia" Text="{Binding Name}" />
+                <Label Text="{Binding NameError}" TextColor="Red" FontSize="12" />
+
+                <Label Text="Opis" />
+                <Editor Placeholder="Opis problemu (min. 10 znaków)"
+                        Text="{Binding Description}" HeightRequest="75" />
+                <Label Text="{Binding DescriptionError}" TextColor="Red" FontSize="12" />
+
+                <Label Text="Priorytet" />
+                <Picker Title="Wybierz priorytet" ItemsSource="{Binding Priorities}"
+                        SelectedItem="{Binding Priority}" />
+                <Label Text="{Binding PriorityError}" TextColor="Red" FontSize="12" />
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                    <Button Text="{Binding SaveButtonText}" Command="{Binding SaveTicketCommand}" />
+                    <Button Grid.Column="1" Text="Wyczyść" Command="{Binding ClearFormCommand}"
+                            BackgroundColor="#DDDDDD" TextColor="Black" />
+                </Grid>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Panel z listą zgłoszeń -->
+        <Border x:Name="ListPanel" Grid.Row="2" Grid.Column="0"
+                BackgroundColor="White" Stroke="#CCCCCC" Padding="10">
+            <Grid RowDefinitions="Auto,Auto,*" RowSpacing="6">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="Zgłoszenia" FontSize="18" FontAttributes="Bold" VerticalOptions="Center" />
+                </Grid>
+                <Grid Grid.Row="1" ColumnDefinitions="*,*">
+                    <Label Text="{Binding TotalCount, StringFormat='Wszystkie: {0}'}" FontSize="13" />
+                    <Label Grid.Column="1" Text="{Binding OpenCount, StringFormat='Niezamknięte: {0}'}" FontSize="13" />
+                </Grid>
+
+                <CollectionView Grid.Row="2" ItemsSource="{Binding Tickets}" SelectionMode="None">
+                    <CollectionView.EmptyView>
+                        <Label Text="Brak zgłoszeń." Padding="10" />
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Ticket">
+                            <Border Stroke="#DDDDDD" Padding="9" Margin="0,0,0,7">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="16" />
+                                    <Label Text="{Binding Description}" FontSize="13" />
+                                    <Label Text="{Binding Priority, StringFormat='Priorytet: {0}'}" FontSize="12" />
+                                    <Button Text="{Binding Status, StringFormat='Status: {0} (zmień)'}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ChangeTicketStatusCommand}"
+                                            CommandParameter="{Binding .}" FontSize="12" />
+                                    <Grid ColumnDefinitions="*,*" ColumnSpacing="6">
+                                        <Button Text="Edytuj"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditTicketCommand}"
+                                                CommandParameter="{Binding .}" />
+                                        <Button Grid.Column="1" Text="Usuń"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteTicketCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#DDDDDD" TextColor="Black" />
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Border>
+    </Grid>
+</ContentPage>

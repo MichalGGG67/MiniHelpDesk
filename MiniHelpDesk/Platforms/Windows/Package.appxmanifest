@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap">
+  <Identity Name="pl.minihelpdesk.app" Publisher="CN=MiniHelpDesk" Version="1.0.0.0" />
+  <Properties><DisplayName>Mini HelpDesk</DisplayName><PublisherDisplayName>Mini HelpDesk</PublisherDisplayName><Logo>appicon.png</Logo></Properties>
+  <Dependencies><TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.17763.0" MaxVersionTested="10.0.26100.0" /></Dependencies>
+  <Resources><Resource Language="pl-PL" /></Resources>
+  <Applications><Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="$targetentrypoint$"><uap:VisualElements DisplayName="Mini HelpDesk" Description="Mini HelpDesk" Square150x150Logo="appicon.png" Square44x44Logo="appicon.png" BackgroundColor="#2457C5" /></Application></Applications>
+</Package>
